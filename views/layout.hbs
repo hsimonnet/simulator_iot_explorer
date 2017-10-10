@@ -1,166 +1,31 @@
 <html lang="en">
-<head>
-  <link href = "jquery-ui.css" rel = "stylesheet">
-  <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
-  <script src = "jquery-ui.js"></script>
-  <script>
-  $(function() {
-    //disabled slider
-    $( "#slider-4" ).slider({
-      orientation:"vertical"
-    });
-    $( "#slider-4" ).slider('disable');
-
-    //Power engine
-    $( "#slider-power" ).slider({
-      orientation:"horizontal",
-      value:50,
-      min: 0, // min value
-      max: 200, // max value
-      slide: function( event, ui ) {
-        $( "#val-power" ).val( ui.value );
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IOT Explorer simulator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <style>
+      body {
+        padding-top: 50px;
       }
-    });
-    $( "#val-power" ).val( $( "#slider-power" ).slider( "value" ) );
+    </style>
+	<link href = "jquery-ui.css" rel = "stylesheet">
+	<script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script src = "jquery-ui.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">IOT Explorer simulator</a>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      {{{body}}}
+    </div>
 
-    //Electricity
-    $( "#slider-elec" ).slider({
-      orientation:"horizontal",
-      value:35,
-      min: 0, // min value
-      max: 100, // max value
-      slide: function( event, ui ) {
-        $( "#val-elec" ).val( ui.value );
-      }
-    });
-    $( "#val-elec" ).val( $( "#slider-elec" ).slider( "value" ) );
-
-    //submitbutton
-    $( "#button-2" ).button();
-    // init accordeon
-    $( "#accordion" ).accordion();
-
-    // init dialogbox
-    $('#dialogMsg').dialog(
-      {autoOpen: false,
-        buttons: {OK: function() {$(this).dialog("close");}},
-        title: "Simulator to IOT Explorer"});
-        $('#dialogMsgError').dialog(
-          {autoOpen: false,
-            buttons: {OK: function() {$(this).dialog("close");}},
-            title: "Error sending event to IOT Explorer"});
-          });
-
-          //Sending events
-          function pushevent(){
-            //$( "#button-2" ).click(function(){
-            console.log('Identification: ' + $('#val-mmsi').val() + ' - ' + $('#val-name').val());
-
-            //create a javascript object with the event field values
-            var eventInfo = {
-              "mmsi__c":$('#val-mmsi').val(),
-              "power_engine__c":$('#val-power').val(),
-              "power_electricity__c":$('#val-elec').val(),
-              "name__c":$('#val-name').val(),
-              "callsign__c":$('#val-callsign').val(),
-              "cog__c":$('#val-cog').val(),
-              "datetime__c":"",
-              "destination__c":$('#val-destination').val(),
-              "draught__c":$('#val-draught').val(),
-              "eta__c":$('#val-eta').val(),
-              "heading__c":$('#val-heading').val(),
-              "lat__c":$('#val-lat').val(),
-              "lon__c":$('#val-lon').val(),
-              "navStat__c":$('#val-navstat').val(),
-              "sog__c":$('#val-sog').val()
-            }
-
-/*
-            {"DeviceID__c": "6442819",
-            "key__c": "trasmediterranea",
-            "temperature__c": $('#val-swelldir16').val(),
-            "humidity__c": $('#val-swelldir16').val(),
-            "ts__c": "trasmediterranea",
-            "door__c": "trasmediterranea"
-          };
-*/
-          console.log('eventInfo = ' + eventInfo);
-          //convert the object to a JSON string (serialize json)
-          var eventInfoJson = JSON.stringify(eventInfo);
-          console.log(eventInfoJson);
-
-          $.ajax({
-            type: 'POST',
-            data: eventInfoJson,
-            contentType: 'application/json',
-            url: '/simulation',
-            success: function(data) {
-              console.log('success');
-              $('#dialogMsg').dialog( "open" );
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-              $('#dialogMsgError').dialog( "open" );
-            }
-          });
-        };
-        </script>
-      </head>
-
-      <body>
-        <div id = "dialogMsg" title = "IOT simulator">Events sent to Salesforce IOT</div>
-        <div id = "dialogMsgError" title = "ERROR IOT simulator">Error ... </div>
-
-        <form id = "formsimulator" runat = "server">
-          <center><img src="images/boat2.png"/></center>
-          <div id="accordion">
-            <h3>Identification</h3>
-            <div>
-              <label for = "val-mmsi">MMSI: </label><input type = "text" id = "val-mmsi" value="235762000" style = "border:0; color:#b9cd6d; font-weight:bold;"/>
-              <label for = "val-name">Name: </label><input type = "text" id = "val-name" value="Queen Mary 2" style = "border:0; color:#b9cd6d; font-weight:bold;"/>
-
-            </div>
-            <h3>Engine</h3>
-            <div>
-              <label for = "val-power">Propulsion power: </label>
-              <input type = "text" id = "val-power" style = "border:0; color:#b9cd6d; font-weight:bold;"/><div id = "slider-power"></div>
-              <label for = "val-elec">Electricity: </label>
-              <input type = "text" id = "val-elec" style = "border:0; color:#b9cd6d; font-weight:bold;"/><div id = "slider-elec"></div>
-            </div>
-            <h3>Navigation</h3>
-            <div>
-              <ul>
-                <li><label for = "val-callsign">Port id destination: </label><input type = "text" id = "val-callsign" value="FRANT" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-destination">Destination: </label><input type = "text" id = "val-destination" value="10" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-lat">Latitude: </label><input type = "number" id = "val-lat" value="37.1993" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-lon">Longitude: </label><input type = "number" id = "val-lon" value="-0.5603" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-cog">Course Over Ground: </label><input type = "number" id = "val-cog" value="155" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-sog">Speed Over Ground: </label><input type = "number" id = "val-sog" value="5" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-draught">Draught: </label><input type = "number" id = "val-draught" value="55.7" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-eta">ETA (Estimated Time Arrival): </label><input type = "text" id = "val-eta" value="12h33" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-navstat">Navigation Status: </label><input type = "number" id = "val-navstat" value="1" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-heading">Heading: </label><input type = "number" id = "val-heading" value="10" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-              </ul>
-            </div>
-            <h3>Wind</h3>
-            <div>
-              <ul>
-                <li><label for = "val-windspeed">Speed: </label><input type = "text" id = "val-windspeed" value="12.19" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-winddir">Direction degrees: </label><input type = "text" id = "val-winddir" value="162" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-winddir16">Direction 16 points: </label><input type = "text" id = "val-winddir16" value="16" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-windgust">Gust: </label><input type = "text" id = "val-windgust" value="33" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-              </ul>
-            </div>
-            <h3>Swell & Weather</h3>
-            <div>
-              <ul>
-                <li><label for = "val-swellheigh">Height: </label><input type = "text" id = "val-swellheigh" value="2.19" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-swelldirdeg">Direction degrees: </label><input type = "text" id = "val-swelldirdeg" value="162" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-swelldir16">Direction 16 points: </label><input type = "text" id = "val-swelldir16" value="16" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-weathertext">Weather info: </label><input type = "text" id = "val-weathertext" value="Clear Weather" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-              </ul>
-            </div>
-          </div>
-        </form>
-        <center><input id = "button-2" onclick="pushevent()" type = "submit" value = "Send Events"></center>
-      </body>
-      </html>
+  </body>
+</html>

@@ -1,11 +1,11 @@
-IOT Simulator for Salesforce Explorer
--------------------------------------
+Quick Force Node
+----------------
 
-The quickest and easiest way to start a Node web app IOT Simulator that uses the Force.com REST APIs (sending platform events).
+The quickest and easiest way to start a Node web app that uses the Force.com REST APIs.
 
 This application has everything you need to start building web apps that use the Force.com REST APIs.  How it works:
 * Instant deployment on the cloud with Heroku
-* Everything for local development including: Node & JqueryUI page
+* Everything for local development including: Node & the Atom code editor
 * Super easy deployment of changes using Atom (no git or command lines necessary)
 
 Go for it:

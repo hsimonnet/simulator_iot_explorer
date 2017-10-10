@@ -38,6 +38,8 @@ app.get('/', function(req, res) {
 	  apiVersion: 'v40.0'
     });
 
+    console.log('------------');
+    console.log(req.query.code);
     if (req.query.code !== undefined) {
       // authenticated
       org.authenticate(req.query, function(err) {
@@ -45,7 +47,7 @@ app.get('/', function(req, res) {
           org.query({ query: 'SELECT id, name FROM Account' }, function(err, results) {
             if (!err) {
               //res.render('index', {records: results.records});
-			  res.render('index3');
+			      res.render('layout3');
             }
             else {
               res.send(err.message);
@@ -97,7 +99,6 @@ app.post('/simulation', function(req, res) {
               res.send(err.message);
             }
 	});
-
 });
 
 
@@ -112,6 +113,7 @@ app.post('/LEDoff', function(req, res) {
 });
 
 app.get('/setup', function(req, res) {
+  console.log('In setup ........isSetup()='+isSetup());
   if (isSetup()) {
     res.redirect('/');
   }
@@ -121,6 +123,7 @@ app.get('/setup', function(req, res) {
     if (req.hostname.indexOf('.herokuapp.com') > 0) {
       herokuApp = req.hostname.replace(".herokuapp.com", "");
     }
+    console.log('Render SETUP .......');
     res.render('setup', { isLocal: isLocal, oauthCallbackUrl: oauthCallbackUrl(req), herokuApp: herokuApp});
   }
 });
