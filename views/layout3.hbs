@@ -35,6 +35,18 @@
     });
     $( "#val-elec" ).val( $( "#slider-elec" ).slider( "value" ) );
 
+    //Fuel level
+    $( "#slider-fuel" ).slider({
+      orientation:"horizontal",
+      value:88,
+      min: 0, // min value
+      max: 100, // max value
+      slide: function( event, ui ) {
+        $( "#val-fuel" ).val( ui.value );
+      }
+    });
+    $( "#val-fuel" ).val( $( "#slider-fuel" ).slider( "value" ) );
+
     //submitbutton
     $( "#button-2" ).button();
     // init accordeon
@@ -72,7 +84,8 @@
               "lat__c":$('#val-lat').val(),
               "lon__c":$('#val-lon').val(),
               "navStat__c":$('#val-navstat').val(),
-              "sog__c":$('#val-sog').val()
+              "sog__c":$('#val-sog').val(),
+              "fuel_level__c":$('#val-fuel').val()
             }
 
 /*
@@ -115,9 +128,8 @@
           <div id="accordion">
             <h3>Identification</h3>
             <div>
-              <label for = "val-mmsi">MMSI: </label><input type = "text" id = "val-mmsi" value="235762000" style = "border:0; color:#b9cd6d; font-weight:bold;"/>
+              <label for = "val-mmsi">MMSI: </label><input type = "text" id = "val-mmsi" value="310627000" style = "border:0; color:#b9cd6d; font-weight:bold;"/>
               <label for = "val-name">Name: </label><input type = "text" id = "val-name" value="Queen Mary 2" style = "border:0; color:#b9cd6d; font-weight:bold;"/>
-
             </div>
             <h3>Engine</h3>
             <div>
@@ -125,6 +137,8 @@
               <input type = "text" id = "val-power" style = "border:0; color:#b9cd6d; font-weight:bold;"/><div id = "slider-power"></div>
               <label for = "val-elec">Electricity: </label>
               <input type = "text" id = "val-elec" style = "border:0; color:#b9cd6d; font-weight:bold;"/><div id = "slider-elec"></div>
+              <label for = "val-power">Fuel level: </label>
+              <input type = "text" id = "val-fuel" style = "border:0; color:#b9cd6d; font-weight:bold;"/><div id = "slider-fuel"></div>
             </div>
             <h3>Navigation</h3>
             <div>
@@ -133,12 +147,12 @@
                 <li><label for = "val-destination">Destination: </label><input type = "text" id = "val-destination" value="10" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
                 <li><label for = "val-lat">Latitude: </label><input type = "number" id = "val-lat" value="37.1993" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
                 <li><label for = "val-lon">Longitude: </label><input type = "number" id = "val-lon" value="-0.5603" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-cog">Course Over Ground: </label><input type = "number" id = "val-cog" value="155" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-sog">Speed Over Ground: </label><input type = "number" id = "val-sog" value="5" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
+                <li><label for = "val-cog">Course Over Ground (relative to true north): </label><input type = "number" id = "val-cog" value="155" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
+                <li><label for = "val-sog">Speed Over Ground (knots): </label><input type = "number" id = "val-sog" value="5" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
                 <li><label for = "val-draught">Draught: </label><input type = "number" id = "val-draught" value="55.7" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-eta">ETA (Estimated Time Arrival): </label><input type = "text" id = "val-eta" value="12h33" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-navstat">Navigation Status: </label><input type = "number" id = "val-navstat" value="1" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
-                <li><label for = "val-heading">Heading: </label><input type = "number" id = "val-heading" value="10" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
+                <li><label for = "val-eta">ETA (Estimated Time Arrival): </label><input type = "text" id = "val-eta" value="10-25 16:50" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
+                <li><label for = "val-navstat">Navigation Status: </label><input type = "number" id = "val-navstat" value="2" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
+                <li><label for = "val-heading">Heading (0 to 359 degrees):</label><input type = "number" id = "val-heading" value="10" style = "border:0; color:#b9cd6d; font-weight:bold;"/></li>
               </ul>
             </div>
             <h3>Wind</h3>
