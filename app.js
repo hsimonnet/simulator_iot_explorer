@@ -27,6 +27,12 @@ hbs.registerHelper('get', function (field) {
   return this.get(field);
 });
 
+//****************************************************
+// After creating in Salesforce a connected App :
+// https://help.salesforce.com/articleView?id=connected_app_create.htm&type=5
+// 
+// specify ClienID & Client Secret in this variable : CONSUMER_KEY & CONSUMER_SECRET
+// *****************************************************
 app.get('/', function (req, res) {
   if (isSetup()) {
     org = nforce.createConnection({
