@@ -23,30 +23,31 @@ function oauthCallbackUrl(req) {
   return req.protocol + '://' + req.get('host');
 }
 
-hbs.registerHelper('get', function(field) {
+hbs.registerHelper('get', function (field) {
   return this.get(field);
 });
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
   if (isSetup()) {
     org = nforce.createConnection({
       clientId: process.env.CONSUMER_KEY,
       clientSecret: process.env.CONSUMER_SECRET,
       redirectUri: oauthCallbackUrl(req),
       mode: 'single',
-	  apiVersion: 'v40.0'
+      apiVersion: 'v40.0'
     });
 
     console.log('------------');
     console.log(req.query.code);
     if (req.query.code !== undefined) {
       // authenticated
-      org.authenticate(req.query, function(err) {
+      org.authenticate(req.query, function (err) {
         if (!err) {
-          org.query({ query: 'SELECT id, name FROM Account' }, function(err, results) {
+          //Validate authentification
+          org.query({ query: 'SELECT id, name FROM Account' }, function (err, results) {
             if (!err) {
-              //res.render('index', {records: results.records});
-			      res.render('layout3');
+              //Show first page of the application after authentification
+              res.render('layout3');
             }
             else {
               res.send(err.message);
@@ -73,46 +74,38 @@ app.get('/', function(req, res) {
 });
 
 
-app.post('/simulation', function(req, res) {
+app.post('/simulation', function (req, res) {
   console.log('In simulation function ....' + req);
   console.log('JSON structure:');
   console.log(req.body);
-
-/* sample event weather event .....
-  {
-"DeviceID__c":"1234",
-"door__c":"trasmediterranea",
-"humidity__c":"12",
-"key__c":"trasmediterranea",
-"temperature__c":"32.445",
-"ts__c":"trasmediterranea"
-}
-*/
-	// insert json inside req.body to event 'trans__e' or AIS_Event__e
-	var evt = nforce.createSObject('AIS_Event__e',req.body);
-	org.insert({ sobject: evt }, function(err, resp){
-	  if (!err) {
-				res.json({success : "Event sent successfully", status : 200});
-            }
-            else {
-              res.send(err.message);
-            }
-	});
+  // ****************************************************************************
+  // Sending Event (throw REST API) to Salesforce
+  // ***************************************************************************
+  /* sample event weather event .....
+    {
+  "DeviceID__c":"1234",
+  "door__c":"trasmediterranea",
+  "humidity__c":"12",
+  "key__c":"trasmediterranea",
+  "temperature__c":"32.445",
+  "ts__c":"trasmediterranea"
+  }
+  */
+  // insert json inside req.body to event 'trans__e' or AIS_Event__e (Api name of Event)
+  var evt = nforce.createSObject('AIS_Event__e', req.body);
+  org.insert({ sobject: evt }, function (err, resp) {
+    if (!err) {
+      res.json({ success: "Event sent successfully", status: 200 });
+    }
+    else {
+      res.send(err.message);
+    }
+  });
 });
 
-
-app.post('/LEDon', function(req, res) {
-    console.log('LEDon button pressed!');
-    // Run your LED toggling code here
-});
-
-app.post('/LEDoff', function(req, res) {
-    console.log('LEDoff button pressed!');
-    // Run your LED toggling code here
-});
-
-app.get('/setup', function(req, res) {
-  console.log('In setup ........isSetup()='+isSetup());
+// ************ Render setup page *******************************
+app.get('/setup', function (req, res) {
+  console.log('In setup ........isSetup()=' + isSetup());
   if (isSetup()) {
     res.redirect('/');
   }
@@ -123,7 +116,7 @@ app.get('/setup', function(req, res) {
       herokuApp = req.hostname.replace(".herokuapp.com", "");
     }
     console.log('Render SETUP .......');
-    res.render('setup', { isLocal: isLocal, oauthCallbackUrl: oauthCallbackUrl(req), herokuApp: herokuApp});
+    res.render('setup', { isLocal: isLocal, oauthCallbackUrl: oauthCallbackUrl(req), herokuApp: herokuApp });
   }
 });
 
